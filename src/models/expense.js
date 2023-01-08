@@ -6,6 +6,12 @@ const expenseSchema = mongoose.Schema({
     },
     amount: {
         type: Number
+    },
+    category: {
+        type: String
+    },
+    date: {
+        type: Date
     }
 })
 
