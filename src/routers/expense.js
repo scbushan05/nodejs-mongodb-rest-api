@@ -8,18 +8,24 @@ router.get('/expenses', async (req, res) => {
         const expenses = await Expense.find();
         res.send(expenses);
     } catch (error) {
-        res.send(error).status(500);
+        res.status(500).send();
     }
 })
 
 router.post('/expenses', async (req, res) => {
     const expense = new Expense(req.body);
-
     try {
         await expense.save();
-        res.send(expense).status(201);
+        res.status(201).send(expense);
     } catch (error) {
-        res.send().status(400);
+        if (error.name === "ValidationError") {
+            let errors = {};
+            Object.keys(error.errors).forEach((key) => {
+                errors[key] = error.errors[key].message;
+            })
+            res.status(400).send(errors);
+        }
+        res.status(500).send();
     }
 })
 
